@@ -32,7 +32,14 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    response_text = process_text(update.message.text)
+    user = update.effective_user
+    text = update.message.text
+    logger.info("echo start: user=%s msg=%s", user.username, text)
+    if len(text) > 512:
+        text = text[:512]
+    await context.bot.send_chat_action(chat_id=update.effective_message.chat_id, action=ChatAction.TYPING)
+    success, response_text = process_text(text)
+    logger.info("echo finish: user=%s msg=%s success=%s resp=%s", user.username, text, success, response_text)
     await update.message.reply_text(response_text)
 
 

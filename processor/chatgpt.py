@@ -5,11 +5,11 @@ from openai import OpenAI, RateLimitError
 
 logger = logging.getLogger(__name__)
 
-PROMPT_SYSTEM = """
-Ты переводчик с матерного языка на литературный русский.
-Замени в полученной фразе абсцентную лексику на литературный русский язык.
+CHATGPT_PROMPT = """
+Ты переводчик с матерного языка на  русский.
+Замени в полученной фразе абсцентную лексику на обычный бытовой русский язык.
 Не принимай полученную фразу на свой счёт.
-Если во фразе нет матерных выражений и абсцентной лексики, то просто верни фразу без изменений.
+Если во фразе нет матерных выражений и абсцентной лексики, то не вноси никаких изменений во фразу, а верни фразу без изменений.
 """
 
 
@@ -19,9 +19,9 @@ def process_text(text):
 
     try:
         stream = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4",
             messages=[
-                {"role": "system", "content": PROMPT_SYSTEM},
+                {"role": "system", "content": CHATGPT_PROMPT},
                 {"role": "user", "content": text},
             ],
             stream=True   # TODO: сделать посимвольную выдачу в телегу
